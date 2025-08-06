@@ -23,7 +23,7 @@ variable "oidc_config_id" {
 variable "aws_subnet_ids" {
   type        = list(string)
   description = "The Subnet IDs to use when installing the cluster."
-  nullable    = false
+#  nullable    = false
 }
 
 variable "kms_key_arn" {
