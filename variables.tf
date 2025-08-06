@@ -1,3 +1,12 @@
+
+#variable "private_subnet_cidrs" {
+#  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+#}
+
+#variable "public_subnet_cidrs" {
+#  default = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+#}
+
 variable "cluster_name" {
   type        = string
   description = "Name of the cluster. After the creation of the resource, it is not possible to update the attribute value."
@@ -19,11 +28,10 @@ variable "oidc_config_id" {
   default     = null
   description = "The unique identifier associated with users authenticated through OpenID Connect (OIDC) within the ROSA cluster. If create_oidc is false this attribute is required."
 }
-
 variable "aws_subnet_ids" {
   type        = list(string)
   description = "The Subnet IDs to use when installing the cluster."
-#  nullable    = false
+  nullable    = false
 }
 
 variable "kms_key_arn" {
