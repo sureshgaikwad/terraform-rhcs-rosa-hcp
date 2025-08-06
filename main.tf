@@ -66,7 +66,6 @@ module "rosa_cluster_hcp" {
   support_role_arn         = var.create_account_roles ? module.account_iam_resources[0].account_roles_arn["HCP-ROSA-Support"] : local.sts_roles.support_role_arn
   worker_role_arn          = var.create_account_roles ? module.account_iam_resources[0].account_roles_arn["HCP-ROSA-Worker"] : local.sts_roles.worker_role_arn
   oidc_config_id           = var.create_oidc ? module.oidc_config_and_provider[0].oidc_config_id : var.oidc_config_id
-  aws_subnet_ids           = var.aws_subnet_ids
   machine_cidr             = var.machine_cidr
   service_cidr             = var.service_cidr
   pod_cidr                 = var.pod_cidr
@@ -79,7 +78,9 @@ module "rosa_cluster_hcp" {
   kms_key_arn              = var.kms_key_arn
   aws_billing_account_id   = var.aws_billing_account_id
   ec2_metadata_http_tokens = var.ec2_metadata_http_tokens
-
+  region           = var.aws_region
+  aws_subnet_ids   = aws_subnet.rosa_subnets[*].id
+  vpc_id           = aws_vpc.rosa_vpc.id
   ########
   # Cluster Admin User
   ########  
@@ -225,6 +226,10 @@ resource "null_resource" "validations" {
       error_message = "\"oidc_config_id\" mustn't be empty when oidc is pre-created (create_oidc != true)."
     }
   }
+}
+
+provider "kubernetes" {
+  config_path = module.rosa_cluster_hcp.kubeconfig_path
 }
 
 data "aws_caller_identity" "current" {}
